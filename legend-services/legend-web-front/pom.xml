@@ -1,0 +1,103 @@
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>legend-services</artifactId>
+    <groupId>com.legend</groupId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <groupId>com.legend</groupId>
+  <artifactId>legend-web-front</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>war</packaging>
+  <name>legend-web-front</name>
+  <url>http://maven.apache.org</url>
+  
+  <properties>
+     <legend_version>0.0.1-SNAPSHOT</legend_version>
+  </properties>
+  
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>com.legend</groupId>
+      <artifactId>legend-service-shiro</artifactId>
+      <version>${legend_version}</version>
+    </dependency>
+  </dependencies>
+  
+<profiles>
+	<profile>
+		<id>dev</id>
+		<properties>
+			<package.environment>dev</package.environment>
+			<war.name>xjh</war.name>
+		</properties>
+		<activation>
+			<activeByDefault>true</activeByDefault>
+		</activation>
+	</profile>
+</profiles>
+
+<build>
+	<finalName>${war.name}</finalName>
+	<outputDirectory>src/main/webapp/WEB-INF/classes</outputDirectory>
+	<plugins>
+		<plugin>
+			<groupId>org.apache.tomcat.maven</groupId>
+			<artifactId>tomcat7-maven-plugin</artifactId>
+			<configuration>
+				<path>/</path>
+				<url></url>
+				<server>tomcat7</server>
+				<port>80</port>
+				<uriEncoding>${project.build.sourceEncoding}</uriEncoding>
+			</configuration>
+		</plugin>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-compiler-plugin</artifactId>
+			<configuration>
+				<source>1.7</source>
+				<target>1.7</target>
+				<encoding>UTF-8</encoding>
+				<optimize>true</optimize>
+				<debug>true</debug>
+				<showDeprecation>true</showDeprecation>
+				<showWarnings>true</showWarnings>
+			</configuration>
+		</plugin>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-surefire-plugin</artifactId>
+			<version>2.7.2</version>
+			<configuration>
+				<testFailureIgnore>true</testFailureIgnore>
+				<skip>true</skip>
+			</configuration>
+		</plugin>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-war-plugin</artifactId>
+			<configuration>
+				<archive>
+					<addMavenDescriptor>false</addMavenDescriptor>
+				</archive>
+				<webResources>
+					<resource>
+						<directory>src/test/config/${package.environment}/properties</directory>
+						<targetPath>WEB-INF/classes/properties</targetPath>
+						<filtering>true</filtering>
+					</resource>
+				</webResources>
+			</configuration>
+		</plugin>
+	</plugins>
+</build>
+</project>
